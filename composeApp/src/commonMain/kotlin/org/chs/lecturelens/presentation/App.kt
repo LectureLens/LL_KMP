@@ -1,4 +1,4 @@
-package org.chs.lecturelens
+package org.chs.lecturelens.presentation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
