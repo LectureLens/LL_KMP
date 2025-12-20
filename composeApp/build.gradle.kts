@@ -6,6 +6,11 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+
+    alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
+    alias(libs.plugins.skie)
 }
 
 kotlin {
@@ -31,10 +36,25 @@ kotlin {
             implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
+            // UI & Navigation
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.ui)
+            implementation(libs.androidx.navigation.compose)
+
+            // DI & ViewModel
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.androidx.lifecycle.viewmodel)
+
+            // Networking & Data
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.json)
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.sqlite.bundled)
+
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
@@ -42,6 +62,13 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+        androidMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
+        }
+
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
     }
 }
@@ -75,5 +102,11 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
+    // Room Compiler는 KSP를 통해 처리
+    add("kspCommonMainMetadata", libs.androidx.room.compiler)
 }
 
+// Room 설정 (클린 아키텍처 Data 계층)
+room {
+    schemaDirectory("$projectDir/schemas")
+}
