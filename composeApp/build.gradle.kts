@@ -42,6 +42,7 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.ui)
             implementation(libs.androidx.navigation.compose)
+            implementation(compose.materialIconsExtended)
 
             // DI & ViewModel
             implementation(libs.koin.core)
