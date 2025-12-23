@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import org.chs.lecturelens.presentation.view.auth.LoginScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -19,6 +20,7 @@ fun MainScreen() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+
 
     Scaffold(
         topBar = {
@@ -57,10 +59,11 @@ fun MainScreen() {
             startDestination = Screen.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(Screen.Home.route) { HomeScreen() }
+            composable(Screen.Home.route) { HomeScreen(navController) }
             composable(Screen.Lectures.route) { LectureListScreen() }
             composable(Screen.Quizzes.route) { QuizListScreen() }
             composable(Screen.Profile.route) { ProfileSettingsScreen() }
+            composable(Screen.Email.route) { LoginScreen() }
         }
     }
 }
