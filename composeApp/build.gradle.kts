@@ -48,6 +48,7 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.koin.compose.viewmodel)
 
             // Networking & Data
             implementation(libs.ktor.client.core)

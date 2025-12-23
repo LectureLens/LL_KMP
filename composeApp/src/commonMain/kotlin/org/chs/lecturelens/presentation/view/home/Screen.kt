@@ -9,6 +9,8 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     object Lectures : Screen("lectures", "강의", Icons.Default.List)
     object Quizzes : Screen("quizzes", "쪽지시험", Icons.Default.Edit)
     object Profile : Screen("profile", "프로필", Icons.Default.AccountCircle)
+    object Email : Screen("email", "이메일 인증", Icons.Default.Email)
+
 
     companion object {
         val items = listOf(Home, Lectures, Quizzes, Profile)
