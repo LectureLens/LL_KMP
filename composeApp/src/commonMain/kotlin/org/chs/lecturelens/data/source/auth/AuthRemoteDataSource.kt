@@ -5,17 +5,28 @@ import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
-import io.ktor.http.ContentType
-import io.ktor.http.contentType
-import io.ktor.utils.io.ByteReadChannel
-import io.ktor.utils.io.KtorDsl
-import org.chs.lecturelens.data.remote.model.EmailRequest
-import org.chs.lecturelens.domain.entities.auth.EmailEntity
+import org.chs.lecturelens.data.remote.model.request.EmailRequest
+import org.chs.lecturelens.data.remote.model.request.EmailVerifyRequest
+import org.chs.lecturelens.data.remote.model.request.LoginRequest
+import org.chs.lecturelens.data.remote.model.request.SignUpRequest
+import org.chs.lecturelens.data.remote.model.response.EmailVerifyResponse
+import org.chs.lecturelens.data.remote.model.response.LoginResponse
 
 class AuthRemoteDataSource(private val client: HttpClient) {
-    // 'class io.ktor.utils.io.SourceByteReadChannel
     suspend fun sendEmail(dto: EmailRequest): HttpResponse = client.post("auth/email/send") {
         println("dto: $dto")
+        setBody(dto)
+    }.body()
+
+    suspend fun login(dto: LoginRequest): LoginResponse = client.post("auth/login") {
+        setBody(dto)
+    }.body()
+
+    suspend fun sendEmailWithCode(dto: EmailVerifyRequest): EmailVerifyResponse = client.post("auth/email/verify") {
+        setBody(dto)
+    }.body()
+
+    suspend fun signUp(dto: SignUpRequest): LoginResponse = client.post("auth/signup") {
         setBody(dto)
     }.body()
 }

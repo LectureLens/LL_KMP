@@ -1,4 +1,4 @@
-package org.chs.lecturelens.data.remote.model
+package org.chs.lecturelens.data.remote.model.request
 
 import kotlinx.serialization.Serializable
 

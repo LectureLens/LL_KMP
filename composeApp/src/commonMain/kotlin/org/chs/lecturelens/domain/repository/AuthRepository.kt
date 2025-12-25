@@ -1,11 +1,19 @@
 package org.chs.lecturelens.domain.repository
 
 import io.ktor.client.statement.HttpResponse
-import io.ktor.utils.io.ByteReadChannel
-import io.ktor.utils.io.KtorDsl
-import org.chs.lecturelens.data.remote.model.EmailRequest
-import org.chs.lecturelens.domain.entities.auth.EmailEntity
+import org.chs.lecturelens.data.remote.model.response.EmailVerifyResponse
+import org.chs.lecturelens.data.remote.model.response.LoginResponse
+import org.chs.lecturelens.domain.entities.auth.Email
+import org.chs.lecturelens.domain.entities.auth.EmailAndCode
+import org.chs.lecturelens.domain.entities.auth.LoginRequestEntity
+import org.chs.lecturelens.domain.entities.auth.SignUpEntity
 
 interface AuthRepository {
-    suspend fun sendEmail(email: EmailEntity): HttpResponse
+    suspend fun sendEmail(email: Email): HttpResponse
+
+    suspend fun login(loginEntity: LoginRequestEntity): LoginResponse
+
+    suspend fun sendEmailWithCode(emailWithCode: EmailAndCode): EmailVerifyResponse
+
+    suspend fun signUp(signUpEntity: SignUpEntity): LoginResponse
 }

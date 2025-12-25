@@ -1,30 +1,195 @@
 package org.chs.lecturelens.presentation.viewModel.auth
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.chs.lecturelens.domain.entities.auth.EmailEntity
-import org.chs.lecturelens.domain.usecase.auth.EmailUseCase
+import org.chs.lecturelens.domain.entities.auth.Code
+import org.chs.lecturelens.domain.entities.auth.Email
+import org.chs.lecturelens.domain.entities.auth.EmailAndCode
+import org.chs.lecturelens.domain.entities.auth.LoginRequestEntity
+import org.chs.lecturelens.domain.entities.auth.Name
+import org.chs.lecturelens.domain.entities.auth.Password
+import org.chs.lecturelens.domain.entities.auth.PhoneNumber
+import org.chs.lecturelens.domain.entities.auth.SignUpEntity
+import org.chs.lecturelens.domain.entities.auth.UserId
+import org.chs.lecturelens.domain.usecase.AuthUseCase
 
-class AuthViewModel(private val emailUseCase: EmailUseCase) : ViewModel(){
-    var email = mutableStateOf("")
-    var password = mutableStateOf("")
+data class AuthUiState(
+    var userId: String = "",
+    var name: String = "",
+    var email: String = "",
+    var emailCode: String = "",
+    var password: String = "",
+    var passwordCheck: String = "",
+    var phone: String = "",
+    var codeTextFieldEnabled: Boolean = false,
+    var codeButtonEnabled: Boolean = true,
+    val isPasswordVisible: Boolean = false,
+    val isPasswordCheckVisible: Boolean = false
+)
 
-    fun sendEmail() {
+class AuthViewModel(private val emailUseCase: AuthUseCase) : ViewModel(){
+    private val _uiState = MutableStateFlow(AuthUiState())
+    val uiState = _uiState.asStateFlow()
+
+    // UI에 보낼 일회성 이벤트를 위한 채널
+    private val _effect = Channel<AuthEffect>()
+    val effect = _effect.receiveAsFlow()
+
+    // UI에서 보여줄 효과들을 정의 (Sealed Interface)
+    sealed interface AuthEffect {
+        data class ShowSnackBar(val message: String) : AuthEffect
+        object NavigateToMain : AuthEffect // 네비게이션도 이런 식으로 처리 가능합니다
+    }
+    fun login() {
         viewModelScope.launch(Dispatchers.IO) {
-            val email = email.value
-            if (email.isNotEmpty()) {
-                emailUseCase.sendEmail(EmailEntity(email))
+            val userId = _uiState.value.userId
+            val password = _uiState.value.password
+            try {
+                emailUseCase.login(LoginRequestEntity(UserId(userId), Password(password)))
+            } catch (e: Exception) {
+                _effect.send(AuthEffect.ShowSnackBar(e.toString()))
             }
         }
     }
 
-    fun updateEmail(newEmail: String) {
-        email.value = newEmail
+    fun signUp() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val userId = _uiState.value.userId
+            val name = _uiState.value.name
+            val email = _uiState.value.email
+            val password = _uiState.value.password
+            val passwordCheck = _uiState.value.passwordCheck
+            val phone = _uiState.value.phone
+            if (password == passwordCheck) {
+                try {
+                    emailUseCase.signUp(SignUpEntity(
+                        UserId(userId),
+                        Email(email),
+                        Name(name),
+                        Password(password),
+                        PhoneNumber(phone)
+                    ))
+                } catch (e: Exception) {
+                    _effect.send(AuthEffect.ShowSnackBar(e.toString()))
+                }
+
+            } else {
+                println("비밀번호가 일치하지 않습니다.")
+            }
+        }
     }
+
+    fun sendEmail() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val email = _uiState.value.email
+            if (email.isNotEmpty()) {
+                try {
+                    emailUseCase.sendEmail(Email(email))
+                    _uiState.update { it.copy(codeTextFieldEnabled = true) }
+                    _effect.send(AuthEffect.ShowSnackBar("이메일 전송 성공"))
+                } catch (e: Exception) {
+                    _effect.send(AuthEffect.ShowSnackBar(e.toString()))
+                }
+            }
+        }
+    }
+
+    fun sendEmailWithCode() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val email = _uiState.value.email
+            val emailCode = _uiState.value.emailCode
+            try {
+                val response = emailUseCase.sendEmailWithCode(EmailAndCode(
+                    Email(email),
+                    Code(emailCode)
+                ))
+                if (response.verified) {
+                    _uiState.update { it.copy(codeButtonEnabled = true) }
+                    _effect.send(AuthEffect.ShowSnackBar("이메일 인증 성공"))
+                    println("이메일 인증 성공")
+                }
+            }catch (e: Exception) {
+                _effect.send(AuthEffect.ShowSnackBar(e.toString()))
+            }
+        }
+    }
+
+    fun updateIsPasswordVisible() {
+        _uiState.update { currentState ->
+            currentState.copy(
+                isPasswordVisible = !currentState.isPasswordVisible
+            )
+        }
+    }
+
+    fun updateIsPasswordCheckVisible() {
+        _uiState.update { currentState ->
+            currentState.copy(
+                isPasswordCheckVisible = !currentState.isPasswordCheckVisible
+            )
+        }
+    }
+    fun updateUserId(newUserId: String) {
+        _uiState.update { currentState ->
+            currentState.copy(userId = newUserId)
+        }
+    }
+
+    fun updateName(newName: String) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                name = newName
+            )
+        }
+    }
+
+    fun updateEmail(newEmail: String) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                email = newEmail
+            )
+        }
+    }
+
+    fun updateEmailCode(newEmailCode: String) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                emailCode = newEmailCode
+            )
+        }
+    }
+
+    fun updatePassword(newPassword: String) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                password = newPassword
+            )
+        }
+    }
+
+    fun updatePasswordCheck(newPasswordCheck: String) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                passwordCheck = newPasswordCheck
+            )
+        }
+    }
+
+    fun updatePhone(newPhone: String) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                phone = newPhone
+            )
+        }
+    }
+
+
 }

@@ -1,4 +1,4 @@
-package org.chs.lecturelens.presentation.view.home
+package org.chs.lecturelens.presentation.view
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -13,6 +13,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import org.chs.lecturelens.presentation.view.auth.LoginScreen
+import org.chs.lecturelens.presentation.view.auth.SignUpScreen
+import org.chs.lecturelens.presentation.view.home.HomeScreen
+import org.chs.lecturelens.presentation.view.home.LectureListScreen
+import org.chs.lecturelens.presentation.view.home.ProfileSettingsScreen
+import org.chs.lecturelens.presentation.view.home.QuizListScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -20,9 +25,12 @@ fun MainScreen() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+    val snackBarHostState = remember { SnackbarHostState() }
+
 
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackBarHostState) },
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text("Lecture Lens") },
@@ -63,7 +71,12 @@ fun MainScreen() {
             composable(Screen.Lectures.route) { LectureListScreen() }
             composable(Screen.Quizzes.route) { QuizListScreen() }
             composable(Screen.Profile.route) { ProfileSettingsScreen() }
-            composable(Screen.Email.route) { LoginScreen() }
+            composable(Screen.SignUp.route) {
+                SignUpScreen(
+                    navController = navController,
+                    snackBarHostState = snackBarHostState)
+            }
+            composable(Screen.Login.route) { LoginScreen(navController = navController) }
         }
     }
 }
