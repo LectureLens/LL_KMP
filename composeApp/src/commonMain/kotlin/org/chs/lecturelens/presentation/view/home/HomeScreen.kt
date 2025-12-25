@@ -18,9 +18,9 @@ fun HomeScreen(navController: NavController) {
         }
 
         Button(onClick = {
-            navController.navigate("email")
+            navController.navigate("signUp")
         }) {
-            Text("이메일 보내기")
+            Text("회원가입")
         }
     }
 }
