@@ -10,9 +10,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.chs.lecturelens.data.mapper.auth.toEntity
 import org.chs.lecturelens.domain.entities.auth.Code
 import org.chs.lecturelens.domain.entities.auth.Email
-import org.chs.lecturelens.domain.entities.auth.EmailAndCode
+import org.chs.lecturelens.domain.entities.auth.EmailAndCodeEntity
 import org.chs.lecturelens.domain.entities.auth.LoginRequestEntity
 import org.chs.lecturelens.domain.entities.auth.Name
 import org.chs.lecturelens.domain.entities.auth.Password
@@ -31,11 +32,11 @@ data class AuthUiState(
     var phone: String = "",
     var codeTextFieldEnabled: Boolean = false,
     var codeButtonEnabled: Boolean = true,
-    val isPasswordVisible: Boolean = false,
-    val isPasswordCheckVisible: Boolean = false
+    var isPasswordVisible: Boolean = false,
+    var isPasswordCheckVisible: Boolean = false
 )
 
-class AuthViewModel(private val emailUseCase: AuthUseCase) : ViewModel(){
+class AuthViewModel(private val authUseCase: AuthUseCase) : ViewModel(){
     private val _uiState = MutableStateFlow(AuthUiState())
     val uiState = _uiState.asStateFlow()
 
@@ -53,9 +54,12 @@ class AuthViewModel(private val emailUseCase: AuthUseCase) : ViewModel(){
             val userId = _uiState.value.userId
             val password = _uiState.value.password
             try {
-                emailUseCase.login(LoginRequestEntity(UserId(userId), Password(password)))
+                val response = authUseCase.login(LoginRequestEntity(UserId(userId), Password(password))).toEntity()
+                _effect.send(AuthEffect.ShowSnackBar(response.toString()))
+                println(response.toString())
             } catch (e: Exception) {
                 _effect.send(AuthEffect.ShowSnackBar(e.toString()))
+                println(e.toString())
             }
         }
     }
@@ -70,7 +74,7 @@ class AuthViewModel(private val emailUseCase: AuthUseCase) : ViewModel(){
             val phone = _uiState.value.phone
             if (password == passwordCheck) {
                 try {
-                    emailUseCase.signUp(SignUpEntity(
+                    authUseCase.signUp(SignUpEntity(
                         UserId(userId),
                         Email(email),
                         Name(name),
@@ -88,12 +92,12 @@ class AuthViewModel(private val emailUseCase: AuthUseCase) : ViewModel(){
     }
 
     fun sendEmail() {
+        _uiState.update { it.copy(codeTextFieldEnabled = true) }
         viewModelScope.launch(Dispatchers.IO) {
             val email = _uiState.value.email
             if (email.isNotEmpty()) {
                 try {
-                    emailUseCase.sendEmail(Email(email))
-                    _uiState.update { it.copy(codeTextFieldEnabled = true) }
+                    authUseCase.sendEmail(Email(email))
                     _effect.send(AuthEffect.ShowSnackBar("이메일 전송 성공"))
                 } catch (e: Exception) {
                     _effect.send(AuthEffect.ShowSnackBar(e.toString()))
@@ -107,12 +111,12 @@ class AuthViewModel(private val emailUseCase: AuthUseCase) : ViewModel(){
             val email = _uiState.value.email
             val emailCode = _uiState.value.emailCode
             try {
-                val response = emailUseCase.sendEmailWithCode(EmailAndCode(
+                val response = authUseCase.sendEmailWithCode(EmailAndCodeEntity(
                     Email(email),
                     Code(emailCode)
                 ))
                 if (response.verified) {
-                    _uiState.update { it.copy(codeButtonEnabled = true) }
+                    _uiState.update { it.copy(codeButtonEnabled = false) }
                     _effect.send(AuthEffect.ShowSnackBar("이메일 인증 성공"))
                     println("이메일 인증 성공")
                 }

@@ -1,3 +1,4 @@
+
 [versions]
 agp = "8.13.2"
 android-compileSdk = "36"
@@ -30,6 +31,7 @@ kotlinx-datetime = "0.6.0"
 room = "2.8.4"
 sqlite = "2.6.2"
 ksp = "2.2.21-2.0.4" # Kotlin 버전과 맞춰야 함
+datastore = "1.2.0"
 
 # Utility
 skie = "0.10.8"
@@ -62,11 +64,14 @@ ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "kto
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-auth = {module = "io.ktor:ktor-client-auth", version.ref = "ktor"}
+ktor-client-logging = {module = "io.ktor:ktor-client-logging", version.ref = "ktor"}
 
 # Storage (Room)
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 
 
 [plugins]

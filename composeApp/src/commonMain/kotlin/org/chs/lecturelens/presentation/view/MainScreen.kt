@@ -74,9 +74,15 @@ fun MainScreen() {
             composable(Screen.SignUp.route) {
                 SignUpScreen(
                     navController = navController,
-                    snackBarHostState = snackBarHostState)
+                    snackBarHostState = snackBarHostState
+                )
             }
-            composable(Screen.Login.route) { LoginScreen(navController = navController) }
+            composable(Screen.Login.route) {
+                LoginScreen(
+                    navController = navController,
+                    snackBarHostState = snackBarHostState
+                )
+            }
         }
     }
 }
