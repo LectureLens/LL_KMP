@@ -4,5 +4,5 @@ import org.chs.lecturelens.domain.usecase.AuthUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
-    factory { AuthUseCase(get()) } // Repository를 주입받는 UseCase
+    factory { AuthUseCase(get(),get()) } // Repository를 주입받는 UseCase
 }

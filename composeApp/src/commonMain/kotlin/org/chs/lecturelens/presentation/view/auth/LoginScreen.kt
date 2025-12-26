@@ -11,9 +11,12 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,8 +31,29 @@ import org.chs.lecturelens.presentation.viewModel.auth.AuthViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun LoginScreen(viewModel: AuthViewModel = koinViewModel(), navController: NavController) {
+fun LoginScreen(viewModel: AuthViewModel = koinViewModel(), navController: NavController,snackBarHostState: SnackbarHostState) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+    // 뷰모델의 이벤트를 관찰 (LaunchedEffect 사용)
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is AuthViewModel.AuthEffect.ShowSnackBar -> {
+                    // 실제 UI 단에서 스낵바를 호출합니다.
+                    snackBarHostState.showSnackbar(
+                        message = effect.message,
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Short
+                    )
+                }
+
+                is AuthViewModel.AuthEffect.NavigateToMain -> {
+                    // 네비게이션 처리
+                }
+            }
+        }
+    }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,

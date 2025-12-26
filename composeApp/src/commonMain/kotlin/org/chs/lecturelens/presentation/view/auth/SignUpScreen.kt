@@ -1,7 +1,6 @@
 package org.chs.lecturelens.presentation.view.auth
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +25,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import org.chs.lecturelens.presentation.view.Screen
 import org.chs.lecturelens.presentation.viewModel.auth.AuthViewModel
@@ -40,7 +37,6 @@ fun SignUpScreen(
     snackBarHostState: SnackbarHostState
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    // 뷰모델의 이벤트를 관찰 (LaunchedEffect 사용)
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
@@ -104,12 +100,10 @@ fun SignUpScreen(
                             onValueChange = { viewModel.updateEmailCode(it) },
                             label = { Text("인증 코드 6자리") }
                         )
-                        if (state.codeButtonEnabled) {
-                            Button(enabled = true, onClick = {
-                                viewModel.sendEmailWithCode()
-                            }) {
-                                Text("확인")
-                            }
+                        Button(enabled = state.codeButtonEnabled, onClick = {
+                            viewModel.sendEmailWithCode()
+                        }) {
+                            Text("확인")
                         }
                     }
                 }

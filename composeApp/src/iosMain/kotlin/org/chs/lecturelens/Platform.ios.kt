@@ -1,9 +1,29 @@
-package org.chs.lecturelens
+package org.chs.lecturelens // commonMain과 동일해야 함
 
-import platform.UIKit.UIDevice
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import kotlinx.cinterop.ExperimentalForeignApi
+import okio.Path.Companion.toPath
+import org.koin.dsl.module
+import platform.Foundation.*
 
-class IOSPlatform: Platform {
-    override val name: String = UIDevice.currentDevice.systemName() + " " + UIDevice.currentDevice.systemVersion
+@OptIn(ExperimentalForeignApi::class)
+actual fun provideDataStore(context: Any?): DataStore<Preferences> {
+    return PreferenceDataStoreFactory.createWithPath(
+        produceFile = {
+            val directory = NSFileManager.defaultManager.URLForDirectory(
+                directory = NSDocumentDirectory,
+                inDomain = NSUserDomainMask,
+                appropriateForURL = null,
+                create = false,
+                error = null,
+            )
+            (requireNotNull(directory).path + "/$DATA_STORE_FILE_NAME").toPath()
+        }
+    )
 }
 
-actual fun getPlatform(): Platform = IOSPlatform()
+actual val platformModule = module {
+    single { provideDataStore() }
+}
