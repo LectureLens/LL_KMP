@@ -12,11 +12,15 @@ actual fun provideDataStore(context: Any?): DataStore<Preferences> {
     val appContext = context as Context
     return PreferenceDataStoreFactory.createWithPath(
         produceFile = {
-            appContext.filesDir.resolve(DATA_STORE_FILE_NAME).absolutePath.toPath()
-        }
+            appContext.filesDir
+                .resolve(DATA_STORE_FILE_NAME)
+                .absolutePath
+                .toPath()
+        },
     )
 }
 
-actual val platformModule = module {
-    single { provideDataStore(androidContext()) }
-}
+actual val platformModule =
+    module {
+        single { provideDataStore(androidContext()) }
+    }

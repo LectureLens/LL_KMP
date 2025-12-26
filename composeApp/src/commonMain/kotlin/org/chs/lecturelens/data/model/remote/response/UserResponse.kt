@@ -9,5 +9,5 @@ data class UserResponse(
     val plan: String,
     val usageCount: Int,
     val usageLimit: Int,
-    val lectureList: List<LectureResponse>
+    val lectureList: List<LectureResponse>,
 )

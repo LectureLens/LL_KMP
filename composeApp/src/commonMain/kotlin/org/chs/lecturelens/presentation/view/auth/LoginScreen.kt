@@ -17,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +30,11 @@ import org.chs.lecturelens.presentation.viewModel.auth.AuthViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun LoginScreen(viewModel: AuthViewModel = koinViewModel(), navController: NavController,snackBarHostState: SnackbarHostState) {
+fun LoginScreen(
+    viewModel: AuthViewModel = koinViewModel(),
+    navController: NavController,
+    snackBarHostState: SnackbarHostState,
+) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     // 뷰모델의 이벤트를 관찰 (LaunchedEffect 사용)
@@ -43,7 +46,7 @@ fun LoginScreen(viewModel: AuthViewModel = koinViewModel(), navController: NavCo
                     snackBarHostState.showSnackbar(
                         message = effect.message,
                         withDismissAction = true,
-                        duration = SnackbarDuration.Short
+                        duration = SnackbarDuration.Short,
                     )
                 }
 
@@ -57,13 +60,13 @@ fun LoginScreen(viewModel: AuthViewModel = koinViewModel(), navController: NavCo
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Text("사용자 ID")
         TextField(
             value = state.userId,
             onValueChange = { viewModel.updateUserId(it) },
-            label = { Text("ID를 입력하세요") }
+            label = { Text("ID를 입력하세요") },
         )
         Text("비밀번호")
         TextField(
@@ -76,10 +79,10 @@ fun LoginScreen(viewModel: AuthViewModel = koinViewModel(), navController: NavCo
                 IconButton(onClick = { viewModel.updateIsPasswordVisible() }) {
                     Icon(
                         imageVector = if (state.isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                        contentDescription = if (state.isPasswordVisible) "비밀번호 숨기기" else "비밀번호 보기"
+                        contentDescription = if (state.isPasswordVisible) "비밀번호 숨기기" else "비밀번호 보기",
                     )
                 }
-            }
+            },
         )
         Button(onClick = {
             viewModel.login()

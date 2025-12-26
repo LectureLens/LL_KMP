@@ -6,17 +6,17 @@ import org.chs.lecturelens.domain.repository.AuthRepository
 import org.chs.lecturelens.domain.repository.TokenRepository
 import org.koin.dsl.module
 
-val repositoryModule = module {
-    single<AuthRepository> {
-        AuthRepositoryImpl(
-            get()
-        )
-    }
+val repositoryModule =
+    module {
+        single<AuthRepository> {
+            AuthRepositoryImpl(
+                get(),
+            )
+        }
 
-    single<TokenRepository> {
-        TokenRepositoryImpl(
-            get()
-        )
+        single<TokenRepository> {
+            TokenRepositoryImpl(
+                get(),
+            )
+        }
     }
-
-}

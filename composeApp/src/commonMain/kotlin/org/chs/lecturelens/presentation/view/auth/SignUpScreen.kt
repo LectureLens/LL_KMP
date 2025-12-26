@@ -34,7 +34,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun SignUpScreen(
     viewModel: AuthViewModel = koinViewModel(),
     navController: NavController,
-    snackBarHostState: SnackbarHostState
+    snackBarHostState: SnackbarHostState,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     LaunchedEffect(Unit) {
@@ -45,7 +45,7 @@ fun SignUpScreen(
                     snackBarHostState.showSnackbar(
                         message = effect.message,
                         withDismissAction = true,
-                        duration = SnackbarDuration.Short
+                        duration = SnackbarDuration.Short,
                     )
                 }
 
@@ -56,25 +56,24 @@ fun SignUpScreen(
         }
     }
 
-
     LazyColumn {
         item {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
                 Text("사용자 ID")
                 TextField(
                     value = state.userId,
                     onValueChange = { viewModel.updateUserId(it) },
-                    label = { Text("ID를 입력하세요") }
+                    label = { Text("ID를 입력하세요") },
                 )
                 Text("이름")
                 TextField(
                     value = state.name,
                     onValueChange = { viewModel.updateName(it) },
-                    label = { Text("이름을 입력하세요") }
+                    label = { Text("이름을 입력하세요") },
                 )
                 // TextField for email
                 Text("이메일")
@@ -82,7 +81,7 @@ fun SignUpScreen(
                     TextField(
                         value = state.email,
                         onValueChange = { viewModel.updateEmail(it) },
-                        label = { Text("이메일을 입력하세요") }
+                        label = { Text("이메일을 입력하세요") },
                     )
                     Button(onClick = {
                         viewModel.sendEmail()
@@ -98,7 +97,7 @@ fun SignUpScreen(
                             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                             value = state.emailCode,
                             onValueChange = { viewModel.updateEmailCode(it) },
-                            label = { Text("인증 코드 6자리") }
+                            label = { Text("인증 코드 6자리") },
                         )
                         Button(enabled = state.codeButtonEnabled, onClick = {
                             viewModel.sendEmailWithCode()
@@ -108,7 +107,6 @@ fun SignUpScreen(
                     }
                 }
 
-
                 Text("비밀번호")
                 TextField(
                     value = state.password,
@@ -116,14 +114,14 @@ fun SignUpScreen(
                     visualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     onValueChange = { viewModel.updatePassword(it) },
                     label = { Text("비밀번호를 입력하세요 (최소 8자)") },
-                            trailingIcon = {
+                    trailingIcon = {
                         IconButton(onClick = { viewModel.updateIsPasswordVisible() }) {
                             Icon(
                                 imageVector = if (state.isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                                contentDescription = if (state.isPasswordVisible) "비밀번호 숨기기" else "비밀번호 보기"
+                                contentDescription = if (state.isPasswordVisible) "비밀번호 숨기기" else "비밀번호 보기",
                             )
                         }
-                    }
+                    },
                 )
 
                 Text("비밀번호 확인")
@@ -133,20 +131,20 @@ fun SignUpScreen(
                     visualTransformation = if (state.isPasswordCheckVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     onValueChange = { viewModel.updatePasswordCheck(it) },
                     label = { Text("비밀번호를 다시 입력하세요") },
-                            trailingIcon = {
+                    trailingIcon = {
                         IconButton(onClick = { viewModel.updateIsPasswordCheckVisible() }) {
                             Icon(
                                 imageVector = if (state.isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                                contentDescription = if (state.isPasswordVisible) "비밀번호 숨기기" else "비밀번호 보기"
+                                contentDescription = if (state.isPasswordVisible) "비밀번호 숨기기" else "비밀번호 보기",
                             )
                         }
-                    }
+                    },
                 )
                 Text("전화번호")
                 TextField(
                     value = state.phone,
                     onValueChange = { viewModel.updatePhone(it) },
-                    label = { Text("휴대폰 번호를 입력하세요 (예: 01012345678)") }
+                    label = { Text("휴대폰 번호를 입력하세요 (예: 01012345678)") },
                 )
                 Button(onClick = {
                     viewModel.signUp()
@@ -166,7 +164,6 @@ fun SignUpScreen(
                         Text("로그인")
                     }
                 }
-
             }
         }
     }

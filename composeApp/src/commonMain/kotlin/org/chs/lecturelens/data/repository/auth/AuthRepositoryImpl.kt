@@ -13,24 +13,18 @@ import org.chs.lecturelens.domain.entities.auth.LoginRequestEntity
 import org.chs.lecturelens.domain.entities.auth.SignUpEntity
 import org.chs.lecturelens.domain.repository.AuthRepository
 
-class AuthRepositoryImpl(private val authRemoteDataSource: AuthRemoteDataSource) : AuthRepository {
-    override suspend fun sendEmail(email: Email): HttpResponse {
-        return authRemoteDataSource.sendEmail(email.toDto())
-    }
+class AuthRepositoryImpl(
+    private val authRemoteDataSource: AuthRemoteDataSource,
+) : AuthRepository {
+    override suspend fun sendEmail(email: Email): HttpResponse = authRemoteDataSource.sendEmail(email.toDto())
 
-    override suspend fun login(loginEntity: LoginRequestEntity): LoginResponse {
-        return authRemoteDataSource.login(loginEntity.toDto())
-    }
+    override suspend fun login(loginEntity: LoginRequestEntity): LoginResponse = authRemoteDataSource.login(loginEntity.toDto())
 
-    override suspend fun sendEmailWithCode(emailWithCode: EmailAndCodeEntity): EmailVerifyResponse {
-        return authRemoteDataSource.sendEmailWithCode(emailWithCode.toDto())
-    }
+    override suspend fun sendEmailWithCode(emailWithCode: EmailAndCodeEntity): EmailVerifyResponse =
+        authRemoteDataSource.sendEmailWithCode(emailWithCode.toDto())
 
-    override suspend fun signUp(signUpEntity: SignUpEntity): LoginResponse {
-        return authRemoteDataSource.signUp(signUpEntity.toDto())
-    }
+    override suspend fun signUp(signUpEntity: SignUpEntity): LoginResponse = authRemoteDataSource.signUp(signUpEntity.toDto())
 
-    override suspend fun refreshToken(refreshToken: RefreshToken): RefreshTokenResponse {
-        return authRemoteDataSource.refreshToken(refreshToken.toDto())
-    }
+    override suspend fun refreshToken(refreshToken: RefreshToken): RefreshTokenResponse =
+        authRemoteDataSource.refreshToken(refreshToken.toDto())
 }

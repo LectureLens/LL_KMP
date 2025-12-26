@@ -1,7 +1,7 @@
 package org.chs.lecturelens.domain.entities.auth
 
-data class LectureEntity (
+data class LectureEntity(
     val id: Int,
     val title: String,
-    val status: String
+    val status: String,
 )
