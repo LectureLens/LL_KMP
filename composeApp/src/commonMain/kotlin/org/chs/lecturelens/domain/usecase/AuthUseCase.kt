@@ -8,11 +8,13 @@ import org.chs.lecturelens.domain.entities.auth.EmailAndCodeEntity
 import org.chs.lecturelens.domain.entities.auth.LoginRequestEntity
 import org.chs.lecturelens.domain.entities.auth.SignUpEntity
 import org.chs.lecturelens.domain.repository.AuthRepository
+import org.chs.lecturelens.domain.repository.GoogleAuthService
 import org.chs.lecturelens.domain.repository.TokenRepository
 
 class AuthUseCase(
     private val authRepository: AuthRepository,
     private val tokenRepository: TokenRepository,
+    private val googleAuthService: GoogleAuthService,
 ) {
     suspend fun sendEmail(email: Email): HttpResponse =
         try {
@@ -57,6 +59,16 @@ class AuthUseCase(
             response
         } catch (e: Exception) {
             println("sendEmailWithCode: $e")
+            throw e
+        }
+
+    suspend fun googleLogin() =
+        try {
+            tokenRepository.clearToken()
+            val response = googleAuthService.signIn()
+            println("googleLogin: $response")
+        } catch (e: Exception) {
+            println("googleLogin: $e")
             throw e
         }
 }

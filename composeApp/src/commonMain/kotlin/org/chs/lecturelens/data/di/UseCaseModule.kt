@@ -5,5 +5,5 @@ import org.koin.dsl.module
 
 val useCaseModule =
     module {
-        factory { AuthUseCase(get(), get()) } // Repository를 주입받는 UseCase
+        factory { AuthUseCase(get(), get(), get()) } // Repository를 주입받는 UseCase
     }

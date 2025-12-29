@@ -55,6 +55,12 @@ class AuthViewModel(
         object NavigateToMain : AuthEffect // 네비게이션도 이런 식으로 처리 가능합니다
     }
 
+    fun googleSignIn() {
+        viewModelScope.launch(Dispatchers.IO) {
+            authUseCase.googleLogin()
+        }
+    }
+
     fun login() {
         viewModelScope.launch(Dispatchers.IO) {
             val userId = _uiState.value.userId

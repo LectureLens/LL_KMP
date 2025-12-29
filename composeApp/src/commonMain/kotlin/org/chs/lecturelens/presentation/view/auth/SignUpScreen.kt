@@ -153,6 +153,7 @@ fun SignUpScreen(
                 }
                 Text("또는")
                 Button(onClick = {
+                    viewModel.googleSignIn()
                 }) {
                     Text("google로 회원가입")
                 }

@@ -43,7 +43,8 @@ GoogleService-Info.plist
 !*.xcodeproj/xcshareddata/
 !*.xcodeproj/project.xcworkspace/
 !*.xcworkspace/contents.xcworkspacedata
-
+**/xcshareddata/
+**/project.xcworkspace/
 # --- Specific Patterns ---
 # 빌드 폴더를 무시하되 특정 소스 내 빌드 결과가 필요 없는 경우를 대비
 !src/**/build/

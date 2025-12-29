@@ -6,6 +6,14 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		AF72D4A72EFFDF0F00AF9E0E /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = AF72D4A62EFFDF0F00AF9E0E /* FirebaseAnalytics */; };
+		AF72D4A92EFFDF0F00AF9E0E /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = AF72D4A82EFFDF0F00AF9E0E /* FirebaseAuth */; };
+		AF72D4AB2EFFDF0F00AF9E0E /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = AF72D4AA2EFFDF0F00AF9E0E /* FirebaseMessaging */; };
+		AF8010B12F028FAD0047DB51 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = AF8010B02F028FAD0047DB51 /* GoogleSignIn */; };
+		AF8010B32F028FAD0047DB51 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = AF8010B22F028FAD0047DB51 /* GoogleSignInSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		0C8D8AF43B1499C5B0B0D15A /* LectureLens.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LectureLens.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -41,6 +49,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AF8010B32F028FAD0047DB51 /* GoogleSignInSwift in Frameworks */,
+				AF72D4AB2EFFDF0F00AF9E0E /* FirebaseMessaging in Frameworks */,
+				AF8010B12F028FAD0047DB51 /* GoogleSignIn in Frameworks */,
+				AF72D4A72EFFDF0F00AF9E0E /* FirebaseAnalytics in Frameworks */,
+				AF72D4A92EFFDF0F00AF9E0E /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,7 +66,15 @@
 				3FDF8C4EB3F939C8E82E1339 /* Configuration */,
 				3390AD13AB149BC1AB9EB371 /* iosApp */,
 				E3A41A37DE9ECD840F292222 /* Products */,
+				657CFDD817709E06730B6F80 /* Frameworks */,
 			);
+			sourceTree = "<group>";
+		};
+		657CFDD817709E06730B6F80 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		E3A41A37DE9ECD840F292222 /* Products */ = {
@@ -71,7 +92,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3F739A1E55236E57A618A3EA /* Build configuration list for PBXNativeTarget "iosApp" */;
 			buildPhases = (
-				FC120C7B84BBEDC60D373FE3 /* Compile Kotlin Framework */,
+				AF72D4A42EFFDE8300AF9E0E /* Compile Kotlin Framework */,
 				3A394254115677540A25DFC3 /* Sources */,
 				A38242A7446FF4B5124F8F51 /* Frameworks */,
 				EDC36646E96DA8B2225EF9D0 /* Resources */,
@@ -84,8 +105,6 @@
 				3390AD13AB149BC1AB9EB371 /* iosApp */,
 			);
 			name = iosApp;
-			packageProductDependencies = (
-			);
 			productName = iosApp;
 			productReference = 0C8D8AF43B1499C5B0B0D15A /* LectureLens.app */;
 			productType = "com.apple.product-type.application";
@@ -114,6 +133,10 @@
 			);
 			mainGroup = 18DFEF5C7D403240B12BE98A;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				AF72D4A52EFFDF0F00AF9E0E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				AF8010AF2F028FAD0047DB51 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E3A41A37DE9ECD840F292222 /* Products */;
 			projectDirPath = "";
@@ -135,7 +158,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		FC120C7B84BBEDC60D373FE3 /* Compile Kotlin Framework */ = {
+		AF72D4A42EFFDE8300AF9E0E /* Compile Kotlin Framework */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -184,6 +207,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_MAP_FILE_PATH = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -338,6 +362,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_MAP_FILE_PATH = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -370,6 +395,53 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AF72D4A52EFFDF0F00AF9E0E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.7.0;
+			};
+		};
+		AF8010AF2F028FAD0047DB51 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AF72D4A62EFFDF0F00AF9E0E /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AF72D4A52EFFDF0F00AF9E0E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		AF72D4A82EFFDF0F00AF9E0E /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AF72D4A52EFFDF0F00AF9E0E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		AF72D4AA2EFFDF0F00AF9E0E /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AF72D4A52EFFDF0F00AF9E0E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		AF8010B02F028FAD0047DB51 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AF8010AF2F028FAD0047DB51 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		AF8010B22F028FAD0047DB51 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AF8010AF2F028FAD0047DB51 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 55FD67844786DDBD5AF3DC06 /* Project object */;
 }

@@ -11,6 +11,8 @@ plugins {
     alias(libs.plugins.room) apply false
     alias(libs.plugins.skie) apply false
     alias(libs.plugins.ktlint) apply false
+    alias(libs.plugins.google.service) apply false
+    alias(libs.plugins.build.konfig) apply false
 }
 
 subprojects {

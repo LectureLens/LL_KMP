@@ -91,6 +91,7 @@ fun LoginScreen(
         }
         Text("또는")
         Button(onClick = {
+            viewModel.googleSignIn()
         }) {
             Text("google로 로그인")
         }

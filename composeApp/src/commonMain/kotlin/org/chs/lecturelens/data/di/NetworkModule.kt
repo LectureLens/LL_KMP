@@ -14,6 +14,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.chs.lecturelens.BuildKonfig
 import org.chs.lecturelens.data.model.local.RefreshToken
 import org.chs.lecturelens.domain.repository.AuthRepository
 import org.chs.lecturelens.domain.repository.TokenRepository
@@ -110,7 +111,7 @@ val networkModule =
                 // 기본 Base URL 설정)
                 defaultRequest {
                     contentType(ContentType.Application.Json)
-                    url("https://lecture-lens.com/api/")
+                    url(BuildKonfig.BASE_URL)
                 }
             }
         }
