@@ -10,4 +10,24 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.room) apply false
     alias(libs.plugins.skie) apply false
+    alias(libs.plugins.ktlint) apply false
+    alias(libs.plugins.google.service) apply false
+    alias(libs.plugins.build.konfig) apply false
+}
+
+subprojects {
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+
+    // 상세 설정 (필요 시)
+    configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+        debug.set(true)
+        verbose.set(true)
+        android.set(true) // Android 관련 규칙 적용 시
+        outputToConsole.set(true)
+        ignoreFailures.set(false)
+        filter {
+            exclude("**/generated/**")
+            include("**/kotlin/**")
+        }
+    }
 }

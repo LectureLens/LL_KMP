@@ -3,8 +3,19 @@ package org.chs.lecturelens.presentation.view
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -12,6 +23,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import io.ktor.websocket.Frame
 import org.chs.lecturelens.presentation.view.auth.LoginScreen
 import org.chs.lecturelens.presentation.view.auth.SignUpScreen
 import org.chs.lecturelens.presentation.view.home.HomeScreen
@@ -27,18 +39,16 @@ fun MainScreen() {
     val currentDestination = navBackStackEntry?.destination
     val snackBarHostState = remember { SnackbarHostState() }
 
-
-
     Scaffold(
         snackbarHost = { SnackbarHost(snackBarHostState) },
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Lecture Lens") },
+                title = { Frame.Text("Lecture Lens") },
                 actions = {
                     IconButton(onClick = { /* 알림 이동 로직 */ }) {
                         Icon(imageVector = Icons.Default.Notifications, contentDescription = "알림")
                     }
-                }
+                },
             )
         },
         bottomBar = {
@@ -56,16 +66,16 @@ fun MainScreen() {
                                 launchSingleTop = true
                                 restoreState = true
                             }
-                        }
+                        },
                     )
                 }
             }
-        }
+        },
     ) { innerPadding ->
         NavHost(
             navController = navController,
             startDestination = Screen.Home.route,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
         ) {
             composable(Screen.Home.route) { HomeScreen(navController) }
             composable(Screen.Lectures.route) { LectureListScreen() }
@@ -74,13 +84,13 @@ fun MainScreen() {
             composable(Screen.SignUp.route) {
                 SignUpScreen(
                     navController = navController,
-                    snackBarHostState = snackBarHostState
+                    snackBarHostState = snackBarHostState,
                 )
             }
             composable(Screen.Login.route) {
                 LoginScreen(
                     navController = navController,
-                    snackBarHostState = snackBarHostState
+                    snackBarHostState = snackBarHostState,
                 )
             }
         }

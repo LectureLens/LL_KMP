@@ -7,4 +7,3 @@ data class Code(
         require(value.length == 6) { "코드는 6자여야 합니다." }
     }
 }
-

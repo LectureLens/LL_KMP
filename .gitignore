@@ -1,19 +1,50 @@
-*.iml
-.kotlin
-.gradle
-**/build/
-xcuserdata
-!src/**/build/
-local.properties
+# --- IDE & OS ---
 .idea
+*.iml
 .DS_Store
+Thumbs.db
 captures
-.externalNativeBuild
+xcuserdata
+# Xcode 사용자 설정 중 공유하지 않아도 되는 항목
+**/xcshareddata/WorkspaceSettings.xcsettings
+
+# --- Build & Artifacts ---
+.gradle
+.kotlin
+**/build/
 .cxx
+.externalNativeBuild
+node_modules/
+# Kotlin/Native 컴파일러 데이터 및 라이브러리 (용량 및 환경 이슈)
+.konan/
+*.klib
+# Xcode 빌드 데이터 (캐시)
+DerivedData/
+
+# --- Security & Sensitive Information (필수 추가) ---
+# 로컬 환경 변수 및 인증 정보
+local.properties
+.env
+*.xcconfig
+
+# Firebase & Google Services (보안상 절대 노출 금지)
+# 웹 클라이언트 ID와 API 키가 포함되어 있으므로 제외해야 합니다.
+google-services.json
+GoogleService-Info.plist
+
+# Android Signing (배포용 키 파일)
+*.jks
+*.keystore
+*.p12
+
+# --- Xcode Project (구조 유지를 위한 예외 처리 포함) ---
 *.xcodeproj/*
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/
 !*.xcodeproj/project.xcworkspace/
 !*.xcworkspace/contents.xcworkspacedata
-**/xcshareddata/WorkspaceSettings.xcsettings
-node_modules/
+**/xcshareddata/
+**/project.xcworkspace/
+# --- Specific Patterns ---
+# 빌드 폴더를 무시하되 특정 소스 내 빌드 결과가 필요 없는 경우를 대비
+!src/**/build/

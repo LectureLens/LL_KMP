@@ -33,10 +33,12 @@ data class AuthUiState(
     var codeTextFieldEnabled: Boolean = false,
     var codeButtonEnabled: Boolean = true,
     var isPasswordVisible: Boolean = false,
-    var isPasswordCheckVisible: Boolean = false
+    var isPasswordCheckVisible: Boolean = false,
 )
 
-class AuthViewModel(private val authUseCase: AuthUseCase) : ViewModel(){
+class AuthViewModel(
+    private val authUseCase: AuthUseCase,
+) : ViewModel() {
     private val _uiState = MutableStateFlow(AuthUiState())
     val uiState = _uiState.asStateFlow()
 
@@ -46,9 +48,19 @@ class AuthViewModel(private val authUseCase: AuthUseCase) : ViewModel(){
 
     // UI에서 보여줄 효과들을 정의 (Sealed Interface)
     sealed interface AuthEffect {
-        data class ShowSnackBar(val message: String) : AuthEffect
+        data class ShowSnackBar(
+            val message: String,
+        ) : AuthEffect
+
         object NavigateToMain : AuthEffect // 네비게이션도 이런 식으로 처리 가능합니다
     }
+
+    fun googleSignIn() {
+        viewModelScope.launch(Dispatchers.IO) {
+            authUseCase.googleLogin()
+        }
+    }
+
     fun login() {
         viewModelScope.launch(Dispatchers.IO) {
             val userId = _uiState.value.userId
@@ -74,17 +86,18 @@ class AuthViewModel(private val authUseCase: AuthUseCase) : ViewModel(){
             val phone = _uiState.value.phone
             if (password == passwordCheck) {
                 try {
-                    authUseCase.signUp(SignUpEntity(
-                        UserId(userId),
-                        Email(email),
-                        Name(name),
-                        Password(password),
-                        PhoneNumber(phone)
-                    ))
+                    authUseCase.signUp(
+                        SignUpEntity(
+                            UserId(userId),
+                            Email(email),
+                            Name(name),
+                            Password(password),
+                            PhoneNumber(phone),
+                        ),
+                    )
                 } catch (e: Exception) {
                     _effect.send(AuthEffect.ShowSnackBar(e.toString()))
                 }
-
             } else {
                 println("비밀번호가 일치하지 않습니다.")
             }
@@ -111,16 +124,19 @@ class AuthViewModel(private val authUseCase: AuthUseCase) : ViewModel(){
             val email = _uiState.value.email
             val emailCode = _uiState.value.emailCode
             try {
-                val response = authUseCase.sendEmailWithCode(EmailAndCodeEntity(
-                    Email(email),
-                    Code(emailCode)
-                ))
+                val response =
+                    authUseCase.sendEmailWithCode(
+                        EmailAndCodeEntity(
+                            Email(email),
+                            Code(emailCode),
+                        ),
+                    )
                 if (response.verified) {
                     _uiState.update { it.copy(codeButtonEnabled = false) }
                     _effect.send(AuthEffect.ShowSnackBar("이메일 인증 성공"))
                     println("이메일 인증 성공")
                 }
-            }catch (e: Exception) {
+            } catch (e: Exception) {
                 _effect.send(AuthEffect.ShowSnackBar(e.toString()))
             }
         }
@@ -129,7 +145,7 @@ class AuthViewModel(private val authUseCase: AuthUseCase) : ViewModel(){
     fun updateIsPasswordVisible() {
         _uiState.update { currentState ->
             currentState.copy(
-                isPasswordVisible = !currentState.isPasswordVisible
+                isPasswordVisible = !currentState.isPasswordVisible,
             )
         }
     }
@@ -137,10 +153,11 @@ class AuthViewModel(private val authUseCase: AuthUseCase) : ViewModel(){
     fun updateIsPasswordCheckVisible() {
         _uiState.update { currentState ->
             currentState.copy(
-                isPasswordCheckVisible = !currentState.isPasswordCheckVisible
+                isPasswordCheckVisible = !currentState.isPasswordCheckVisible,
             )
         }
     }
+
     fun updateUserId(newUserId: String) {
         _uiState.update { currentState ->
             currentState.copy(userId = newUserId)
@@ -150,7 +167,7 @@ class AuthViewModel(private val authUseCase: AuthUseCase) : ViewModel(){
     fun updateName(newName: String) {
         _uiState.update { currentState ->
             currentState.copy(
-                name = newName
+                name = newName,
             )
         }
     }
@@ -158,7 +175,7 @@ class AuthViewModel(private val authUseCase: AuthUseCase) : ViewModel(){
     fun updateEmail(newEmail: String) {
         _uiState.update { currentState ->
             currentState.copy(
-                email = newEmail
+                email = newEmail,
             )
         }
     }
@@ -166,7 +183,7 @@ class AuthViewModel(private val authUseCase: AuthUseCase) : ViewModel(){
     fun updateEmailCode(newEmailCode: String) {
         _uiState.update { currentState ->
             currentState.copy(
-                emailCode = newEmailCode
+                emailCode = newEmailCode,
             )
         }
     }
@@ -174,7 +191,7 @@ class AuthViewModel(private val authUseCase: AuthUseCase) : ViewModel(){
     fun updatePassword(newPassword: String) {
         _uiState.update { currentState ->
             currentState.copy(
-                password = newPassword
+                password = newPassword,
             )
         }
     }
@@ -182,7 +199,7 @@ class AuthViewModel(private val authUseCase: AuthUseCase) : ViewModel(){
     fun updatePasswordCheck(newPasswordCheck: String) {
         _uiState.update { currentState ->
             currentState.copy(
-                passwordCheck = newPasswordCheck
+                passwordCheck = newPasswordCheck,
             )
         }
     }
@@ -190,10 +207,8 @@ class AuthViewModel(private val authUseCase: AuthUseCase) : ViewModel(){
     fun updatePhone(newPhone: String) {
         _uiState.update { currentState ->
             currentState.copy(
-                phone = newPhone
+                phone = newPhone,
             )
         }
     }
-
-
 }

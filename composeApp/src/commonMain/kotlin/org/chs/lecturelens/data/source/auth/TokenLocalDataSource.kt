@@ -7,7 +7,9 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-class TokenLocalDataSource (private val dataSource: DataStore<Preferences>) {
+class TokenLocalDataSource(
+    private val dataSource: DataStore<Preferences>,
+) {
     companion object {
         private val ACCESS_TOKEN = stringPreferencesKey("access_token")
         private val REFRESH_TOKEN = stringPreferencesKey("refresh_token")
@@ -25,13 +27,17 @@ class TokenLocalDataSource (private val dataSource: DataStore<Preferences>) {
         }
     }
 
-    suspend fun getAccessToken(): String? = dataSource.data.map { preferences ->
-        preferences[ACCESS_TOKEN]
-    }.first()
+    suspend fun getAccessToken(): String? =
+        dataSource.data
+            .map { preferences ->
+                preferences[ACCESS_TOKEN]
+            }.first()
 
-    suspend fun getRefreshToken(): String? = dataSource.data.map { preferences ->
-        preferences[REFRESH_TOKEN]
-    }.first()
+    suspend fun getRefreshToken(): String? =
+        dataSource.data
+            .map { preferences ->
+                preferences[REFRESH_TOKEN]
+            }.first()
 
     suspend fun clearToken() {
         dataSource.edit {

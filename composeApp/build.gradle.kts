@@ -1,16 +1,45 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties // [해결] util 에러 방지를 위한 필수 임포트
+
+
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
     alias(libs.plugins.skie)
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.google.service)
+    alias(libs.plugins.build.konfig)
+}
+val localProperties = Properties()
+val localPropertiesFile = rootProject.projectDir.resolve("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
+
+val webClientId = localProperties.getProperty("WEB_CLIENT_ID") ?: ""
+val baseUrl = localProperties.getProperty("BASE_URL") ?: ""
+
+buildkonfig {
+    packageName = "org.chs.lecturelens"
+    defaultConfigs {
+        buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "WEB_CLIENT_ID", webClientId)
+        buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "BASE_URL", baseUrl)
+    }
+}
+
+ktlint {
+    additionalEditorconfig.set(
+        mapOf(
+            "ktlint_function_naming_ignore_when_annotated_with" to "Composable",
+        ),
+    )
 }
 
 kotlin {
@@ -19,21 +48,31 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosArm64(),
-        iosSimulatorArm64()
+        iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "composeApp"
             isStatic = true
         }
     }
-    
+
     sourceSets {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.ktor.client.okhttp)
+
+            // Firebase
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.analytics)
+
+            // Credetial
+            implementation(libs.androidx.credetial)
+            implementation(libs.androidx.credetial.play.services.auth)
+            implementation(libs.identity.googleid)
         }
         commonMain.dependencies {
             // UI & Navigation
@@ -57,11 +96,13 @@ kotlin {
             implementation(libs.ktor.client.auth)
             implementation(libs.ktor.client.logging)
 
-
             // Storage (Room)
             implementation(libs.androidx.room.runtime)
             implementation(libs.sqlite.bundled)
             implementation(libs.androidx.datastore)
+
+            // Firebase
+            implementation(libs.firebase.auth)
 
             // other
             implementation(compose.components.resources)
@@ -72,9 +113,6 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
-        androidMain.dependencies {
-            implementation(libs.ktor.client.okhttp)
-        }
 
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -84,12 +122,21 @@ kotlin {
 
 android {
     namespace = "org.chs.lecturelens"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.compileSdk
+            .get()
+            .toInt()
 
     defaultConfig {
         applicationId = "org.chs.lecturelens"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
+        targetSdk =
+            libs.versions.android.targetSdk
+                .get()
+                .toInt()
         versionCode = 1
         versionName = "1.0"
     }

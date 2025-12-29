@@ -20,7 +20,7 @@ fun QuizListScreen() {
                 ListItem(
                     headlineContent = { Text("퀴즈 세트 #$index") },
                     trailingContent = { Text("점수: 80/100") },
-                    modifier = Modifier.clickable { /* 퀴즈 풀이 화면 이동 */ }
+                    modifier = Modifier.clickable { /* 퀴즈 풀이 화면 이동 */ },
                 )
             }
         }

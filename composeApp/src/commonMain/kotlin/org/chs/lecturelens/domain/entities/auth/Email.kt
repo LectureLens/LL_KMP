@@ -5,7 +5,6 @@ data class Email(
 ) {
     init {
         require(value.contains("@")) { "이메일 형식이 올바르지 않습니다." }
-        require(value.isNotEmpty()) { "이메일은 1자 이상"}
+        require(value.isNotEmpty()) { "이메일은 1자 이상" }
     }
 }
-

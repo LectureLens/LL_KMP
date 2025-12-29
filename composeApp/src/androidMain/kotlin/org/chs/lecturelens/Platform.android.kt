@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import okio.Path.Companion.toPath
+import org.chs.lecturelens.domain.repository.GoogleAuthService
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -12,11 +13,18 @@ actual fun provideDataStore(context: Any?): DataStore<Preferences> {
     val appContext = context as Context
     return PreferenceDataStoreFactory.createWithPath(
         produceFile = {
-            appContext.filesDir.resolve(DATA_STORE_FILE_NAME).absolutePath.toPath()
-        }
+            appContext.filesDir
+                .resolve(DATA_STORE_FILE_NAME)
+                .absolutePath
+                .toPath()
+        },
     )
 }
 
-actual val platformModule = module {
-    single { provideDataStore(androidContext()) }
-}
+actual val platformModule =
+    module {
+        single { provideDataStore(androidContext()) }
+        single<GoogleAuthService> {
+            AndroidGoogleAuthService(get(), BuildKonfig.WEB_CLIENT_ID)
+        }
+    }

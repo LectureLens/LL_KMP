@@ -4,7 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
@@ -18,15 +18,15 @@ fun ProfileSettingsScreen() {
         ListItem(
             headlineContent = { Text("사용자 이름") },
             supportingContent = { Text("user@example.com") },
-            leadingContent = { Icon(Icons.Default.Person, null) }
+            leadingContent = { Icon(Icons.Default.Person, null) },
         )
-        Divider()
+        HorizontalDivider()
         // 사이드바 하단에 있던 설정 목록들
         val settings = listOf("계정 설정", "알림 설정", "구독 정보", "로그아웃")
         settings.forEach { setting ->
             ListItem(
                 headlineContent = { Text(setting) },
-                modifier = Modifier.clickable { /* 설정 세부 로직 */ }
+                modifier = Modifier.clickable { /* 설정 세부 로직 */ },
             )
         }
     }

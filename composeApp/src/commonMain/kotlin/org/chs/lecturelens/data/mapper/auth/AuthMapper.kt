@@ -22,12 +22,13 @@ fun Email.toDto(): EmailRequest = EmailRequest(value)
 fun LoginRequestEntity.toDto(): LoginRequest = LoginRequest(userId.value, password.value)
 
 fun LoginResponse.toEntity() = LoginResponseEntity(accessToken, refreshToken, user.toEntity())
+
 fun EmailAndCodeEntity.toDto(): EmailVerifyRequest = EmailVerifyRequest(email.value, code.value)
 
-fun SignUpEntity.toDto(): SignUpRequest =
-    SignUpRequest(userId.value, email.value, name.value, password.value, phoneNumber.value)
+fun SignUpEntity.toDto(): SignUpRequest = SignUpRequest(userId.value, email.value, name.value, password.value, phoneNumber.value)
 
 fun RefreshToken.toDto(): RefreshTokenRequest = RefreshTokenRequest(value)
+
 fun UserResponse.toEntity(): UserInfoEntity =
     UserInfoEntity(
         userId = userId,
@@ -35,7 +36,7 @@ fun UserResponse.toEntity(): UserInfoEntity =
         plan = plan,
         usageCount = usageCount,
         usageLimit = usageLimit,
-        lectureList = lectureList.map { it.toEntity() }
+        lectureList = lectureList.map { it.toEntity() },
     )
 
 fun LectureResponse.toEntity(): LectureEntity = LectureEntity(id, title, status)
